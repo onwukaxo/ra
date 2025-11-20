@@ -1,0 +1,56 @@
+import MenuItem from '../models/MenuItem.js'
+
+export async function listMenu(req, res) {
+  const items = await MenuItem.find().sort({ createdAt: -1 })
+  res.json({ success: true, data: items })
+}
+
+export async function getMenuItem(req, res) {
+  const item = await MenuItem.findById(req.params.id)
+  if (!item) {
+    return res.status(404).json({ success: false, message: 'Menu item not found' })
+  }
+  res.json({ success: true, data: item })
+}
+
+export async function createMenuItem(req, res) {
+  const { name, description, price, category, imageUrl, isAvailable } = req.body
+  if (!name || price == null) {
+    return res.status(400).json({ success: false, message: 'Name and price are required' })
+  }
+  const item = await MenuItem.create({
+    name,
+    description: description || '',
+    price,
+    category: category || 'General',
+    imageUrl: imageUrl || '',
+    isAvailable: isAvailable !== undefined ? isAvailable : true,
+  })
+  res.status(201).json({ success: true, data: item })
+}
+
+export async function updateMenuItem(req, res) {
+  const item = await MenuItem.findById(req.params.id)
+  if (!item) {
+    return res.status(404).json({ success: false, message: 'Menu item not found' })
+  }
+
+  const fields = ['name', 'description', 'price', 'category', 'imageUrl', 'isAvailable']
+  fields.forEach((field) => {
+    if (req.body[field] !== undefined) {
+      item[field] = req.body[field]
+    }
+  })
+
+  await item.save()
+  res.json({ success: true, data: item })
+}
+
+export async function deleteMenuItem(req, res) {
+  const item = await MenuItem.findById(req.params.id)
+  if (!item) {
+    return res.status(404).json({ success: false, message: 'Menu item not found' })
+  }
+  await item.deleteOne()
+  res.json({ success: true, message: 'Menu item deleted' })
+}
