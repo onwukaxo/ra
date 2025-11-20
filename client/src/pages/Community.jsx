@@ -52,11 +52,11 @@ export default function Community({ embed = false }) {
           are shared.
         </p>
 
-        {/* Socials section CENTERED */}
+        {/* Socials section */}
         <div className="mt-12 flex justify-center">
           <div className="grid max-w-2xl grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
-            {SITE.socials.map((social) => {
-              const Icon = social.icon;
+            {SITE.socials.filter(s => !!s.url).map((social) => {
+              const Icon = social.icon
               return (
                 <a
                   key={social.name}
@@ -64,31 +64,16 @@ export default function Community({ embed = false }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
-                  className="
-                    group relative flex items-center justify-center rounded-xl
-                    border border-gray-100 bg-white p-4 shadow-sm transition
-                    hover:-translate-y-0.5 hover:shadow-md focus:outline-none
-                    focus-visible:ring-2 focus-visible:ring-[#FDCD2F]/60
-                  "
-                  style={{ color: "#0C1E22" }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = social.hoverColor)
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "#0C1E22")
-                  }
+                  className="group relative flex items-center justify-center rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDCD2F]/60"
+                  style={{ color: '#0C1E22' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = social.hoverColor)}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#0C1E22')}
                 >
-                  <Icon
-                    size={28}
-                    className="transition-transform group-hover:scale-110"
-                  />
+                  <Icon size={28} className="transition-transform group-hover:scale-110" />
                   <span className="sr-only">{social.name}</span>
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-[#FDCD2F]/0 to-[#FDCD2F]/0 opacity-0 transition group-hover:opacity-100 group-hover:from-[#FDCD2F]/10"
-                  />
+                  <span aria-hidden className="pointer-events-none absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-[#FDCD2F]/0 to-[#FDCD2F]/0 opacity-0 transition group-hover:opacity-100 group-hover:from-[#FDCD2F]/10" />
                 </a>
-              );
+              )
             })}
           </div>
         </div>

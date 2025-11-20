@@ -1,22 +1,27 @@
+import { FaInstagram, FaFacebook, FaTiktok, FaYoutube, FaTwitter, FaWhatsapp, FaTwitterSquare } from 'react-icons/fa'
+
 export const SITE = {
+  name: 'rations.food',
+  tagline: 'Real food. Real community.',
+  description: 'rations.food is a community-first food brand focused on honest sourcing, nutritious meals, and neighborhood impact.',
+  socials: [
+    { name: 'TikTok', url: 'https://www.tiktok.com/@rations.food', icon: FaTiktok, hoverColor: '#ff0050' },
+    { name: 'Instagram', url: 'https://instagram.com/rations.food', icon: FaInstagram, hoverColor: '#E4405F' },
+    { name: 'Facebook', url: 'https://facebook.com/rations.food', icon: FaFacebook, hoverColor: '#1877F2' },
+    { name: 'YouTube', url: 'https://youtube.com/@rationsfood', icon: FaYoutube, hoverColor: '#FF0000' },
+    { name: 'X', url: 'https://x.com/rationsfood', icon: FaTwitter, hoverColor: '#1d9bf0 ' },
+    { name: 'WhatsApp', url: 'https://wa.me/2349122058888', icon: FaWhatsapp, hoverColor: '#25D366' },
+  ],
   contacts: {
-    email: import.meta.env.VITE_CONTACT_EMAIL || 'rations.ng@gmail.com',
-    phone: import.meta.env.VITE_CONTACT_PHONE || '+2349122058888',
-    whatsapp: `https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER || '+2349122058888'}`,
-    location: import.meta.env.VITE_CONTACT_LOCATION || 'Rations, Plot 123, Railway junction, Idu Industrial District, Abuja 900001, Federal Capital Territory',
-  },
-  socials: {
-    instagram: import.meta.env.VITE_SOCIAL_INSTAGRAM || '',
-    tiktok: import.meta.env.VITE_SOCIAL_TIKTOK || '',
-    facebook: import.meta.env.VITE_SOCIAL_FACEBOOK || '',
-    youtube: import.meta.env.VITE_SOCIAL_YOUTUBE || '',
-    x: import.meta.env.VITE_SOCIAL_X || '',
-    whatsapp: undefined,
+    email: 'rations.ng@gmail.com',
+    phone: '+2349122058888',
+    whatsapp: 'https://wa.me/2349122058888',
+    location: 'Rations, Plot 123, Railway junction, Idu Industrial District, Abuja 900001, Federal Capital Territory',
   },
   bank: {
-    name: import.meta.env.VITE_BANK_NAME || 'Rations Bank',
-    accountName: import.meta.env.VITE_BANK_ACCOUNT_NAME || 'Rations Food Ltd',
-    accountNumber: import.meta.env.VITE_BANK_ACCOUNT_NUMBER || '1234567890',
+    name: 'Rations Bank',
+    accountName: 'Rations Food Ltd',
+    accountNumber: '1234567890',
   },
 }
 

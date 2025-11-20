@@ -1,4 +1,5 @@
 import { SITE } from '../config/site'
+import ContactIllustration from '../assets/undraw_contact-us_kcoa 1-PvdDtSNb.svg'
 
 export default function Contact() {
   const email = SITE.contacts.email
@@ -7,34 +8,85 @@ export default function Contact() {
   const location = SITE.contacts.location
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Contact Us</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white border border-slate-100 rounded-xl p-4 space-y-3">
-          <div className="text-sm text-slate-700">We’d Love to Hear from You</div>
-          <div className="text-xs text-slate-600">Reach out by email, phone, WhatsApp, or visit our location. We’ll get back to you as soon as possible.</div>
-          <div className="space-y-2 text-sm">
-            <div>
-              <div className="font-semibold">Email</div>
-              <a href={`mailto:${email}`} className="underline">{email}</a>
+    <section className="bg-[#F9FAFB] py-10">
+      <div className="max-w-6xl mx-auto px-6">
+  {/* Page Header */}
+        <h1 className="text-4xl font-extrabold text-center text-ration-dark mb-14">
+         Contact Us
+        </h1>
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+         {/* Contact Info Card */}
+          <div className="bg-white rounded-2xl p-8 space-y-8 shadow-sm hover:shadow-lg transition-shadow">
+            <h2 className="text-2xl font-bold text-ration-dark">
+            We’d Love to Hear from You
+            </h2>
+            <p className="text-gray-600">
+             Reach out by email, phone, WhatsApp, or visit our
+              location. We’ll get back to you as soon as possible.
+            </p>
+           {/* Email */}
+            <div className="space-y-1">
+              <h3 className="text-xs uppercase tracking-wide text-gray-500">
+                Email
+              </h3>
+              <a
+                href={`mailto:${SITE.contacts.email}`}
+                className="text-ration-dark font-medium hover:text-ration-yellow transition-colors"
+              >
+              {SITE.contacts.email}
+              </a>
             </div>
-            <div>
-              <div className="font-semibold">Phone</div>
-              <a href={`tel:${phone}`} className="underline">{phone}</a>
+           {/* Phone */}
+            <div className="space-y-1">
+              <h3 className="text-xs uppercase tracking-wide text-gray-500">
+                Phone
+              </h3>
+              <a
+                href={`tel:${SITE.contacts.phone}`}
+                className="text-ration-dark font-medium hover:text-ration-yellow transition-colors"
+              >
+            {SITE.contacts.phone}
+              </a>
             </div>
-            <div>
-              <div className="font-semibold">WhatsApp</div>
-              <a href={whatsapp} target="_blank" rel="noreferrer" className="underline">Chat on WhatsApp</a>
+            {/* WhatsApp */}
+            <div className="space-y-1">
+              <h3 className="text-xs uppercase tracking-wide text-gray-500">
+                WhatsApp
+              </h3>
+              <a
+                href={SITE.contacts.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-lg bg-ration-green px-4 py-2 text-white font-medium hover:bg-ration-green-hover transition-colors"
+              >
+               Chat on WhatsApp
+              </a>
+            </div>
+            {/* Location */}
+            <div className="space-y-1">
+              <h3 className="text-xs uppercase tracking-wide text-gray-500">
+                Location
+              </h3>
+              <a
+                href="https://maps.app.goo.gl/P4G1SLF8Kt36jaDk7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-gray-700 hover:text-ration-yellow transition-colors leading-relaxed"
+              >
+                {location}
+              </a>
             </div>
           </div>
-        </div>
-
-        <div className="bg-white border border-slate-100 rounded-xl p-4 space-y-3">
-          <div className="font-semibold text-sm">Location</div>
-          <div className="text-sm text-slate-700">{location}</div>
+          {/* Illustration Section */}
+          <div className="flex justify-center">
+            <img
+              src={ContactIllustration}
+              alt="Contact illustration"
+              className="max-w-full h-auto rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            />
+          </div>
         </div>
       </div>
-    </div>
-  )
+    </section>
+  );
 }
