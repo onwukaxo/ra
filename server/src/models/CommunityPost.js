@@ -8,6 +8,13 @@ const communityPostSchema = new mongoose.Schema(
     tag: { type: String, default: 'Update' },
     publishedAt: { type: Date },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    // Extended fields for admin management
+    slug: { type: String },
+    excerpt: { type: String },
+    coverImageUrl: { type: String },
+    tags: [{ type: String }],
+    status: { type: String, enum: ['draft', 'published'], default: 'published' },
+    deleted: { type: Boolean, default: false },
   },
   { timestamps: true },
 )

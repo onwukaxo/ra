@@ -1,7 +1,9 @@
 import MenuItem from '../models/MenuItem.js'
 
 export async function listMenu(req, res) {
-  const items = await MenuItem.find().sort({ createdAt: -1 })
+  const isAdmin = req.user?.role === 'ADMIN'
+  const query = isAdmin ? {} : { archived: { $ne: true } }
+  const items = await MenuItem.find(query).sort({ createdAt: -1 })
   res.json({ success: true, data: items })
 }
 
@@ -51,6 +53,7 @@ export async function deleteMenuItem(req, res) {
   if (!item) {
     return res.status(404).json({ success: false, message: 'Menu item not found' })
   }
-  await item.deleteOne()
-  res.json({ success: true, message: 'Menu item deleted' })
+  item.archived = true
+  await item.save()
+  res.json({ success: true, message: 'Menu item archived' })
 }

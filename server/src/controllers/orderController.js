@@ -118,3 +118,45 @@ export async function updateOrderStatus(req, res, next) {
     next(err)
   }
 }
+
+export async function getOrderById(req, res, next) {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate('items.menuItem')
+      .populate('user', 'name email phone')
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' })
+    }
+    res.json({ success: true, data: order })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function adminListOrders(req, res, next) {
+  try {
+    const { status, paymentStatus, orderType, from, to, page = 1, limit = 20 } = req.query
+    const query = {}
+    if (status) query.status = status
+    if (paymentStatus) query.paymentStatus = paymentStatus
+    if (orderType) query.orderType = orderType
+    if (from || to) {
+      query.createdAt = {}
+      if (from) query.createdAt.$gte = new Date(from)
+      if (to) query.createdAt.$lte = new Date(to)
+    }
+
+    const skip = (Number(page) - 1) * Number(limit)
+    const orders = await Order.find(query)
+      .populate('items.menuItem')
+      .populate('user', 'name email phone')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit))
+      .lean()
+
+    res.json({ success: true, data: orders })
+  } catch (err) {
+    next(err)
+  }
+}

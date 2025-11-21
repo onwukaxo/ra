@@ -29,7 +29,19 @@ export default function OrdersTab({ orders = [] }) {
               <summary className="flex items-center justify-between cursor-pointer">
                 <div className="text-sm">
                   <div className="font-semibold">#{String(o._id).slice(-6)}</div>
-                  <div className="text-slate-600">{String(o.orderType || 'pickup').toUpperCase()} • {String(o.status || 'pending')}</div>
+                  <div className="text-slate-600 flex items-center gap-2">
+                    <span>{String(o.orderType || 'pickup').toUpperCase()}</span>
+                    {(() => {
+                      const s = String(o.status || '').toUpperCase()
+                      const cls =
+                        s === 'PENDING' ? 'bg-yellow-50 text-yellow-700 border border-yellow-200' :
+                        s === 'PREPARING' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                        s === 'READY' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' :
+                        s === 'COMPLETED' ? 'bg-green-50 text-green-700 border border-green-200' :
+                        s === 'CANCELLED' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-slate-100 text-slate-700 border border-slate-200'
+                      return <span className={`text-xs px-2 py-1 rounded-full ${cls}`}>{s || 'PENDING'}</span>
+                    })()}
+                  </div>
                 </div>
                 <div className="text-sm text-right">
                   <div className="font-semibold">₦{(o.total || 0).toLocaleString()}</div>

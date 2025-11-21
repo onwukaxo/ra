@@ -53,10 +53,14 @@ export default function Navbar() {
             <NavLink to="/menu" className={navLinkClasses}>Menu</NavLink>
             <NavLink to="/community" className={navLinkClasses}>Community</NavLink>
             <NavLink to="/contact" className={navLinkClasses}>Contact</NavLink>
-            {user && (
-              <>
-                <NavLink to="/orders" className={navLinkClasses}>My Orders</NavLink>
-              </>
+            {user && user.role !== 'ADMIN' && (
+              <NavLink to="/orders" className={navLinkClasses}>My Orders</NavLink>
+            )}
+            {user && user.role !== 'ADMIN' && (
+              <NavLink to="/dashboard" className={navLinkClasses}>Dashboard</NavLink>
+            )}
+            {user && user.role === 'ADMIN' && (
+              <NavLink to="/admin" className={navLinkClasses}>Admin</NavLink>
             )}
           </div>
 
@@ -83,7 +87,8 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-3">
               {user ? (
                 <>
-<Link to={user.role === 'ADMIN' ? '/admin' : '/dashboard'} className="text-sm text-slate-700 hover:underline">Hi, {user.name}</Link>                  <button
+                  <Link to={user.role === 'ADMIN' ? '/admin' : '/dashboard'} className="text-sm text-slate-700 hover:underline">Hi, {user.name}</Link>
+                  <button
                     onClick={logout}
                     className="text-sm px-3 py-2 rounded-full  bg-red-600 text-white border-slate-200 hover:bg-red-700"
                   >

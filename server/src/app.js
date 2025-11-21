@@ -8,6 +8,7 @@ import menuRoutes from './routes/menuRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import communityRoutes from './routes/communityRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
+import publicRoutes from './routes/publicRoutes.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 const app = express()
@@ -27,6 +28,7 @@ app.use('/api/menu', menuRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/community', communityRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/public', publicRoutes)
 
 app.use(notFound)
 app.use(errorHandler)

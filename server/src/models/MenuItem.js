@@ -8,6 +8,8 @@ const menuItemSchema = new mongoose.Schema(
     category: { type: String, default: 'General' },
     imageUrl: { type: String, default: '' },
     isAvailable: { type: Boolean, default: true },
+    popularity: { type: Number, default: 0 },
+    archived: { type: Boolean, default: false },
   },
   { timestamps: true },
 )

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import api from '../../api/api'
 import FormInput from '../../components/FormInput'
 import Button from '../../components/Button'
+import AdminLayout from '../../components/admin/AdminLayout'
 
 export default function AdminCommunity() {
   const [posts, setPosts] = useState([])
@@ -15,7 +16,7 @@ export default function AdminCommunity() {
 
   const load = () => {
     setLoading(true)
-    api.get('/community')
+    api.get('/admin/community')
       .then(res => setPosts(res.data.data))
       .finally(() => setLoading(false))
   }
@@ -30,18 +31,18 @@ export default function AdminCommunity() {
 
   const handleCreate = async (e) => {
     e.preventDefault()
-    await api.post('/community', form)
+    await api.post('/admin/community', form)
     setForm({ title: '', content: '', tag: '', imageUrl: '' })
     load()
   }
 
   const handleDelete = async (id) => {
-    await api.delete(`/community/${id}`)
+    await api.delete(`/admin/community/${id}`)
     load()
   }
 
   return (
-    <div className="space-y-4 text-sm">
+    <AdminLayout>
       <h1 className="text-xl font-semibold">Manage community posts</h1>
       <form onSubmit={handleCreate} className="bg-white border border-slate-100 rounded-xl p-4 space-y-3">
         <FormInput label="Title" name="title" value={form.title} onChange={handleChange} required />
@@ -81,6 +82,6 @@ export default function AdminCommunity() {
           ))}
         </div>
       </div>
-    </div>
+    </AdminLayout>
   )
 }

@@ -23,8 +23,29 @@ import AdminRoute from './components/AdminRoute'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import Payment from './pages/Payment'
+import AdminSettings from './pages/admin/AdminSettings'
+import AdminOrderDetail from './pages/admin/AdminOrderDetail'
+import api from './api/api'
+import { useEffect } from 'react'
+import { SITE } from './config/site'
 
 function App() {
+  useEffect(() => {
+    api.get('/public/settings')
+      .then(res => {
+        const s = res.data?.data || {}
+        if (s.contacts) SITE.contacts = { ...SITE.contacts, ...s.contacts }
+        if (s.bank) SITE.bank = { ...SITE.bank, ...s.bank }
+        if (Array.isArray(s.socials)) {
+          const map = new Map(s.socials.map((x) => [x.name, x.url]))
+          SITE.socials = (SITE.socials || []).map((entry) => ({
+            ...entry,
+            url: map.get(entry.name) ?? entry.url,
+          }))
+        }
+      })
+      .catch(() => {})
+  }, [])
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -80,6 +101,16 @@ function App() {
           <Route path="/admin/users" element={
             <AdminRoute>
               <AdminUsers />
+            </AdminRoute>
+          } />
+          <Route path="/admin/settings" element={
+            <AdminRoute>
+              <AdminSettings />
+            </AdminRoute>
+          } />
+          <Route path="/admin/orders/:id" element={
+            <AdminRoute>
+              <AdminOrderDetail />
             </AdminRoute>
           } />
         </Routes>

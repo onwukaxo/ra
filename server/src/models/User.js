@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema(
     addressLine: { type: String },
     password: { type: String, required: true },
     role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
+    status: { type: String, enum: ['active', 'suspended'], default: 'active' },
+    adminNote: { type: String, default: '' },
     isVerified: { type: Boolean, default: false },
     phoneVerified: { type: Boolean, default: false },
     emailVerified: { type: Boolean, default: false },
