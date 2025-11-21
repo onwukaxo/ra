@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/api'
 import { SITE } from '../config/site'
+import MediaRenderer from '../components/MediaRenderer'
 
 export default function Community({ embed = false }) {
   const [posts, setPosts] = useState([])
@@ -163,88 +164,8 @@ export default function Community({ embed = false }) {
                   </div>
                 </div>
 
-                {(post.imageUrl && (!hasMedia || mediaType === 'link' || mediaType === 'audio' || mediaType === '')) && (
-                  <div className="relative overflow-hidden rounded-b-xl">
-                    <div className="w-full" style={{ paddingTop: '75%' }}>
-                      <img
-                        src={post.imageUrl}
-                        alt={post.mediaTitle || post.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {hasMedia && mediaType === 'image' && (
-                  <div className="relative overflow-hidden rounded-b-xl">
-                    <div className="w-full" style={{ paddingTop: '75%' }}>
-                      <img
-                        src={post.mediaUrl}
-                        alt={post.mediaTitle || post.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {hasMedia && (mediaType === 'youtube' || mediaType === 'video') && (
-                  <div className="relative rounded-b-xl overflow-hidden">
-                    {mediaType === 'youtube' && ytId ? (
-                      <div className="w-full" style={{ paddingTop: '56.25%' }}>
-                        <img
-                          src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`}
-                          alt={post.mediaTitle || post.title}
-                          className="absolute inset-0 w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/30" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="h-12 w-12 rounded-full bg-white/90 text-[#0C1E22] flex items-center justify-center">▶</div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="w-full bg-[#0C1E22]" style={{ paddingTop: '56.25%' }}>
-                        {post.imageUrl ? (
-                          <img
-                            src={post.imageUrl}
-                            alt={post.mediaTitle || post.title}
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
-                        ) : null}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="h-12 w-12 rounded-full bg-white/90 text-[#0C1E22] flex items-center justify-center">▶</div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {hasMedia && mediaType === 'audio' && (
-                  <div className="px-4 pb-4">
-                    <audio controls className="w-full">
-                      <source src={post.mediaUrl} />
-                    </audio>
-                  </div>
-                )}
-
-                {hasMedia && mediaType === 'link' && (
-                  <div className="px-4 pb-4">
-                    <div className="p-3 border rounded-lg flex items-center justify-between">
-                      <div className="text-xs text-slate-700">Media link</div>
-                      <a
-                        href={post.mediaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-1 rounded-full border text-xs"
-                        onClick={(e) => e.stopPropagation()}
-                        onMouseDown={(e) => e.stopPropagation()}
-                      >
-                        Open media
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {hasMedia && post.mediaTitle && (
+                <MediaRenderer url={post.mediaUrl} title={post.mediaTitle || post.title} variant="list" imageFallback={post.imageUrl} />
+                {post.mediaUrl && post.mediaTitle && (
                   <div className="px-4 py-2 text-xs text-slate-500">{post.mediaTitle}</div>
                 )}
               </article>

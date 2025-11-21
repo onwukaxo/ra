@@ -104,61 +104,8 @@ export default function CommunityPostPage() {
       </div>
 
       <h1 className="text-2xl sm:text-3xl font-bold text-[#0C1E22]">{post.title}</h1>
-      {post.imageUrl && !imageError && (
-        <img src={post.imageUrl} onError={() => setImageError(true)} alt={post.title} className="w-full max-h-[480px] object-cover rounded-xl" />
-      )}
-      {imageError && (
-        <div className="text-xs text-slate-500">Media unavailable</div>
-      )}
-      {post.mediaUrl && (
-        <div className="mt-2">
-          {String(post.mediaType||'').toLowerCase() === 'youtube' ? (
-            <div className="relative w-full overflow-hidden rounded-xl" style={{ paddingTop: '56.25%' }}>
-              <iframe
-                title={post.mediaTitle || post.title}
-                src={(function(){
-                  const url = String(post.mediaUrl)
-                  try {
-                    const u = new URL(url)
-                    if (u.hostname.includes('youtu.be')) {
-                      const id = u.pathname.replace('/', '')
-                      return `https://www.youtube.com/embed/${id}`
-                    }
-                    const id = u.searchParams.get('v')
-                    if (id) return `https://www.youtube.com/embed/${id}`
-                    return url
-                  } catch { return url }
-                })()}
-                className="absolute top-0 left-0 w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            </div>
-          ) : String(post.mediaType||'').toLowerCase() === 'video' ? (
-            <div>
-              {!videoError ? (
-                <video controls className="w-full rounded-xl max-h-96 object-cover" onError={() => setVideoError(true)}>
-                  <source src={post.mediaUrl} />
-                </video>
-              ) : (
-                <div className="text-xs text-slate-500">Media unavailable</div>
-              )}
-            </div>
-          ) : String(post.mediaType||'').toLowerCase() === 'audio' ? (
-            <audio controls className="w-full">
-              <source src={post.mediaUrl} />
-            </audio>
-          ) : String(post.mediaType||'').toLowerCase() === 'image' ? (
-            <img src={post.mediaUrl} alt={post.mediaTitle || post.title} className="w-full rounded-xl shadow" />
-          ) : (
-            <div className="mt-2 p-3 border rounded-lg flex items-center justify-between">
-              <div className="text-xs text-slate-700">Media link</div>
-              <a href={post.mediaUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1 rounded-full border text-xs">Open media</a>
-            </div>
-          )}
-          {post.mediaTitle && <div className="text-xs text-slate-500 mt-1">{post.mediaTitle}</div>}
-        </div>
-      )}
+      <MediaRenderer url={post.mediaUrl} title={post.mediaTitle || post.title} variant="detail" imageFallback={post.imageUrl} />
+      {post.mediaUrl && post.mediaTitle && <div className="text-xs text-slate-500 mt-1">{post.mediaTitle}</div>}
       {post.externalLinkUrl && (
         <div className="mt-2 p-3 border rounded-lg">
           <a
@@ -223,3 +170,4 @@ export default function CommunityPostPage() {
     </article>
   )
 }
+import MediaRenderer from '../components/MediaRenderer'

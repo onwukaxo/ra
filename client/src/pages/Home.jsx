@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className="space-y-16">
       {/* Hero Section  */}
-      <section className="relative">
+      <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] -mt-6">
         {/* Background image */}
         <div
           className="absolute inset-0 -z-10 bg-cover bg-center"
@@ -28,7 +28,7 @@ export default function Home() {
         {/* Content container  */}
         <div className="relative mx-auto max-w-6xl px-6 py-28 text-center text-white">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-            Good food. Fast.
+            Food, culture & community in every bite.
           </h1>
           <p className="mt-4 text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
             Experience the best meals, made with love and fresh ingredients just for you.
