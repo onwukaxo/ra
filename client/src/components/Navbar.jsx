@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { ShoppingCart } from 'lucide-react'
 import CartDrawer from './CartDrawer'
 import logo from '../assets/logo.png'
+import api from '../api/api'
 
 const navLinkClasses = ({ isActive }) =>
   `px-3 py-1 text-sm font-medium rounded-full transition-colors ${
@@ -17,6 +18,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)        // mobile menu
   const [cartOpen, setCartOpen] = useState(false) // cart drawer
   const navigate = useNavigate()
+  const [banner, setBanner] = useState(null)
 
   const handleOpenCart = () => {
     setCartOpen(true)
@@ -31,6 +33,24 @@ export default function Navbar() {
     const open = () => handleOpenCart()
     window.addEventListener('open-cart', open)
     return () => window.removeEventListener('open-cart', open)
+  }, [])
+
+  useEffect(() => {
+    api.get('/settings').then(res => {
+      const s = res.data?.data || {}
+      const now = Date.now()
+      const start = s.promoStart ? new Date(s.promoStart).getTime() : null
+      const end = s.promoEnd ? new Date(s.promoEnd).getTime() : null
+      const promoActive = Boolean(s.promoMessage && start && end && now >= start && now <= end)
+      const eventUpcoming = Boolean(s.eventMessage && s.eventDate && new Date(s.eventDate).getTime() > now)
+      if (promoActive) {
+        setBanner({ type: 'promo', message: s.promoMessage, end: s.promoEnd })
+      } else if (eventUpcoming) {
+        setBanner({ type: 'event', message: s.eventMessage, date: s.eventDate })
+      } else {
+        setBanner(null)
+      }
+    }).catch(() => {})
   }, [])
 
   // count of all items in cart
@@ -124,6 +144,22 @@ export default function Navbar() {
           </div>
         </nav>
 
+        {banner && (
+          <div className="border-t bg-white/95">
+            <div className="max-w-6xl mx-auto px-4 py-2 text-xs flex items-center gap-2">
+              <span className={banner.type==='promo' ? 'text-red-600 font-semibold' : 'text-[#0C1E22] font-semibold'}>
+                {banner.type === 'promo' ? 'Promo' : 'Event'}
+              </span>
+              <span className="text-slate-700">{banner.message}</span>
+              {banner.type === 'promo' && banner.end && (
+                <span className="ml-auto text-slate-500">Ends: {new Date(banner.end).toLocaleString()}</span>
+              )}
+              {banner.type === 'event' && banner.date && (
+                <span className="ml-auto text-slate-500">Date: {new Date(banner.date).toLocaleString()}</span>
+              )}
+            </div>
+          </div>
+        )}
         {/* Mobile dropdown menu */}
         {open && (
           <div className="md:hidden border-t bg-white px-4 py-3 flex flex-col gap-2">
@@ -133,6 +169,9 @@ export default function Navbar() {
 
             {user && (
               <>
+                {user.role !== 'ADMIN' && (
+                  <NavLink to="/dashboard" onClick={() => setOpen(false)} className={navLinkClasses}>Dashboard</NavLink>
+                )}
                 <NavLink to="/orders" onClick={() => setOpen(false)} className={navLinkClasses}>My Orders</NavLink>
                 {user.role === 'ADMIN' && (
                   <NavLink to="/admin" onClick={() => setOpen(false)} className={navLinkClasses}>Admin</NavLink>

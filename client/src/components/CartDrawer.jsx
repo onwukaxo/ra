@@ -137,7 +137,7 @@ export default function CartDrawer({ open, onClose, items = [] }) {
 
           <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
             <button
-              className="w-full px-4 py-2 rounded-full bg-green-600 text-white hover:bg-green-700 text-sm font-semibold"
+              className="w-full px-4 py-3 sm:py-2 rounded-full bg-green-600 text-white hover:bg-green-700 text-base sm:text-sm font-semibold"
               onClick={() => {
                 if (items.length === 0) return
                 if (!user) {
@@ -156,13 +156,13 @@ export default function CartDrawer({ open, onClose, items = [] }) {
             <Link
               to="/cart"
               onClick={onClose}
-              className="w-full text-center px-4 py-2 rounded-full border border-slate-300 text-sm font-semibold"
+              className="w-full text-center px-4 py-3 sm:py-2 rounded-full border border-slate-300 text-base sm:text-sm font-semibold"
             >
               Make payment
             </Link>
           </div>
-          <div className="mt-3">
-            <Link to="/cart" onClick={onClose} className="text-xs underline text-slate-700">Go to cart</Link>
+          <div className="mt-3 ">
+            <Link to="/cart" onClick={onClose} className="text-xs text-slate-700">Go to cart</Link>
           </div>
                     <div className="flex gap-2 py-2">
             {/* <Link
@@ -173,7 +173,7 @@ export default function CartDrawer({ open, onClose, items = [] }) {
               Checkout
             </Link> */}
             <button
-              className="px-4 py-2 rounded-full border border-slate-300 text-sm"
+              className="px-4 py-3 sm:py-2 rounded-full border border-slate-300 text-base sm:text-sm"
               onClick={onClose}
             >
               Continue

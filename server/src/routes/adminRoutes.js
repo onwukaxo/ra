@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { overview } from '../controllers/adminController.js'
 import { getAdminSettings, upsertAdminSettings } from '../controllers/settingsController.js'
-import { listMenu, createMenuItem, updateMenuItem, deleteMenuItem } from '../controllers/menuController.js'
+import { listMenu, createMenuItem, updateMenuItem, deleteMenuItem, hardDeleteMenuItem } from '../controllers/menuController.js'
 import { adminListOrders, getOrderById, updateOrderStatus, confirmPayment } from '../controllers/orderController.js'
 import { listUsers, getUser, updateUserAdminSafe } from '../controllers/userController.js'
 import { listPosts, getPost, createPost, updatePost, deletePost } from '../controllers/communityController.js'
@@ -17,6 +17,7 @@ router.get('/menu', protect, requireAdmin, listMenu)
 router.post('/menu', protect, requireAdmin, createMenuItem)
 router.patch('/menu/:id', protect, requireAdmin, updateMenuItem)
 router.delete('/menu/:id', protect, requireAdmin, deleteMenuItem)
+router.delete('/menu/:id/hard', protect, requireAdmin, hardDeleteMenuItem)
 
 // Orders management
 router.get('/orders', protect, requireAdmin, adminListOrders)

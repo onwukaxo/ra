@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const settingsSchema = new mongoose.Schema(
+  const settingsSchema = new mongoose.Schema(
   {
     contacts: {
       email: { type: String, default: '' },
@@ -14,6 +14,14 @@ const settingsSchema = new mongoose.Schema(
       accountNumber: { type: String, default: '' },
     },
     socials: [{ name: String, url: String }],
+    promoMessage: { type: String, default: '' },
+    promoStart: { type: Date },
+    promoEnd: { type: Date },
+    eventMessage: { type: String, default: '' },
+    eventDate: { type: Date },
+    eventStart: { type: Date },
+    eventEnd: { type: Date },
+    visitorAlertEnabled: { type: Boolean, default: false },
   },
   { timestamps: true },
 )

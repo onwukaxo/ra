@@ -41,10 +41,18 @@ export default function OrdersTab({ orders = [] }) {
                         s === 'CANCELLED' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-slate-100 text-slate-700 border border-slate-200'
                       return <span className={`text-xs px-2 py-1 rounded-full ${cls}`}>{s || 'PENDING'}</span>
                     })()}
+                    {(() => {
+                      const p = String(o.paymentStatus || '').toLowerCase()
+                      const cls =
+                        p === 'paid' ? 'bg-green-50 text-green-700 border border-green-200' :
+                        p === 'failed' ? 'bg-red-50 text-red-700 border border-red-200' :
+                        'bg-yellow-50 text-yellow-700 border border-yellow-200'
+                      return <span className={`text-xs px-2 py-1 rounded-full ${cls}`}>{(o.paymentStatus||'pending').toUpperCase()}</span>
+                    })()}
                   </div>
                 </div>
                 <div className="text-sm text-right">
-                  <div className="font-semibold">₦{(o.total || 0).toLocaleString()}</div>
+                  <div className="font-semibold">₦{Number(o.totalAmount || o.total || 0).toLocaleString()}</div>
                   <div className="text-slate-600">{new Date(o.createdAt).toLocaleString()}</div>
                 </div>
               </summary>
@@ -57,6 +65,36 @@ export default function OrdersTab({ orders = [] }) {
                   </ul>
                 ) : (
                   <p>No items</p>
+                )}
+                <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="rounded border border-slate-200 p-2">
+                    <div className="font-semibold">Customer</div>
+                    <div>{o.customer?.name || '—'}</div>
+                    <div className="text-slate-600">{o.customer?.phone || '—'}</div>
+                  </div>
+                  <div className="rounded border border-slate-200 p-2">
+                    <div className="font-semibold">Payment</div>
+                    <div className="text-slate-700">Method: {String(o.paymentMethod||'').replace('_',' ') || '—'}</div>
+                    <div className="text-slate-700">Status: {(o.paymentStatus||'pending').toUpperCase()}</div>
+                  </div>
+                  <div className="rounded border border-slate-200 p-2">
+                    <div className="font-semibold">Totals</div>
+                    <div>Subtotal: ₦{Number(o.subtotal || 0).toLocaleString()}</div>
+                    <div>Total: ₦{Number(o.totalAmount || o.total || 0).toLocaleString()}</div>
+                  </div>
+                </div>
+                {String(o.orderType||'pickup') === 'delivery' ? (
+                  <div className="mt-3 rounded border border-slate-200 p-2">
+                    <div className="font-semibold">Delivery</div>
+                    <div>Address: {o.delivery?.addressLine || '—'}</div>
+                    <div className="text-slate-700">Instructions: {o.delivery?.instructions || '—'}</div>
+                  </div>
+                ) : (
+                  <div className="mt-3 rounded border border-slate-200 p-2">
+                    <div className="font-semibold">Pickup</div>
+                    <div>Location: {o.pickup?.location || '—'}</div>
+                    <div className="text-slate-700">Time: {o.pickup?.time || '—'}</div>
+                  </div>
                 )}
               </div>
               <div className="mt-3">

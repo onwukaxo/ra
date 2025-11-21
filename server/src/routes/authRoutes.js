@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { login, me, register, forgotPassword, resetPassword, sendOtp, verifyOtp, verifyEmail, resendOtp } from '../controllers/authController.js'
+import { login, me, register, forgotPassword, resetPassword, sendOtp, verifyOtp, verifyEmail, resendOtp, changePassword } from '../controllers/authController.js'
 import { protect } from '../middleware/authMiddleware.js'
 
 const router = Router()
@@ -25,6 +25,7 @@ router.post('/login', login)
 router.get('/me', protect, me)
 router.post('/forgot-password', rateLimit((req)=>req.ip), forgotPassword)
 router.put('/reset-password/:token', resetPassword)
+router.put('/change-password', protect, changePassword)
 
 router.post('/send-otp', rateLimit((req)=>String(req.body.phone||req.ip)), sendOtp)
 router.post('/verify-otp', verifyOtp)

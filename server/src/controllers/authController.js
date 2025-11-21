@@ -223,6 +223,49 @@ export async function resetPassword(req, res) {
   }
 }
 
+export async function changePassword(req, res) {
+  try {
+    const currentPassword = String(req.body.currentPassword || '')
+    const newPassword = String(req.body.newPassword || '')
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ success: false, message: 'Current and new password are required' })
+    }
+
+    if (newPassword.length < 8 || !/\d/.test(newPassword)) {
+      return res.status(400).json({ success: false, message: 'Password must be at least 8 characters and include a number.' })
+    }
+
+    const user = await User.findById(req.user._id)
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' })
+    }
+
+    const match = await bcrypt.compare(currentPassword, user.password)
+    if (!match) {
+      return res.status(400).json({ success: false, message: 'Current password is incorrect' })
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10)
+    await user.save()
+
+    const token = generateToken(user._id, user.role)
+    const safeUser = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      phoneVerified: user.phoneVerified,
+      emailVerified: user.emailVerified,
+    }
+
+    return res.json({ success: true, message: 'Password changed', data: { user: safeUser, token } })
+  } catch {
+    return res.status(400).json({ success: false, message: 'Unable to change password' })
+  }
+}
+
 /** helper (still used by some flows) */
 function hashCode(code) {
   return crypto.createHash('sha256').update(String(code)).digest('hex')

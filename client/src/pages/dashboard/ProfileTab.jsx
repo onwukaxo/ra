@@ -3,14 +3,14 @@ import { useAuth } from '../../context/AuthContext'
 
 export default function ProfileTab({ me, onUpdated }) {
   const { updateMe } = useAuth()
-  const [form, setForm] = useState({ name: '', phone: '', email: '' })
+  const [form, setForm] = useState({ name: '', phone: '', email: '', addressLine: '' })
   const [editing, setEditing] = useState(false)
   const [msg, setMsg] = useState('')
   const [errors, setErrors] = useState({ name: '', phone: '' })
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    setForm({ name: me?.name || '', phone: me?.phone || '', email: me?.email || '' })
+    setForm({ name: me?.name || '', phone: me?.phone || '', email: me?.email || '', addressLine: me?.addressLine || me?.address || '' })
   }, [me])
 
   const validate = () => {
@@ -26,7 +26,7 @@ export default function ProfileTab({ me, onUpdated }) {
     if (!validate()) { setMsg('Fix the errors above.'); return }
     setSaving(true); setMsg('')
     try {
-      await updateMe({ name: form.name.trim(), phone: form.phone.trim(), email: form.email?.trim() || undefined })
+      await updateMe({ name: form.name.trim(), phone: form.phone.trim(), email: form.email?.trim() || undefined, addressLine: form.addressLine?.trim() || undefined })
       setEditing(false)
       setMsg('Profile updated successfully')
       onUpdated?.()
@@ -51,6 +51,10 @@ export default function ProfileTab({ me, onUpdated }) {
       <div>
         <label className="block text-xs text-slate-600 mb-1">Email</label>
         <input disabled={!editing} value={form.email} onChange={(e)=>setForm(f=>({ ...f, email: e.target.value }))} className="w-full rounded-lg px-3 py-2 text-sm border border-slate-300" />
+      </div>
+      <div>
+        <label className="block text-xs text-slate-600 mb-1">Address Line</label>
+        <input disabled={!editing} value={form.addressLine} onChange={(e)=>setForm(f=>({ ...f, addressLine: e.target.value }))} className="w-full rounded-lg px-3 py-2 text-sm border border-slate-300" />
       </div>
       <div className="flex items-center gap-2">
         {!editing ? (

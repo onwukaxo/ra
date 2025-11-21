@@ -21,7 +21,7 @@ export default function CartPage() {
         <div className="bg-white border border-slate-100 rounded-xl p-4 text-sm">
           <p className="text-slate-600">Your cart is empty. Add items from the menu.</p>
           <div className="mt-3">
-            <button onClick={() => navigate('/menu')} className="px-4 py-2 rounded-full bg-ration-dark text-white text-sm">Back to Menu</button>
+            <button onClick={() => navigate('/menu')} className="px-4 py-3 sm:py-2 rounded-full bg-ration-dark text-white text-base sm:text-sm">Back to Menu</button>
           </div>
         </div>
       ) : (
@@ -97,7 +97,7 @@ export default function CartPage() {
                   navigate('/order', { state: { checkoutMethod: 'whatsapp' } })
                 }
               }}
-              className="w-full px-4 py-2 rounded-full bg-ration-green-hover text-white border border-slate-300 text-sm disabled:opacity-60"
+              className="w-full px-4 py-3 sm:py-2 rounded-full bg-ration-green-hover text-white border border-slate-300 text-base sm:text-sm disabled:opacity-60"
               disabled={items.length === 0}
             >
               Checkout via WhatsApp
@@ -107,7 +107,7 @@ export default function CartPage() {
                 if (items.length === 0) return
                 navigate('/order', { state: { checkoutMethod: 'payment' } })
               }}
-              className="w-full px-4 py-2 rounded-full bg-ration-dark text-ration-yellow border border-slate-300 text-sm disabled:opacity-60"
+              className="w-full px-4 py-3 sm:py-2 rounded-full bg-ration-dark text-ration-yellow border border-slate-300 text-base sm:text-sm disabled:opacity-60"
               disabled={items.length === 0}
             >
               Proceed to payment

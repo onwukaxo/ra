@@ -19,14 +19,63 @@ export default function Community({ embed = false }) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
         {posts.slice(0, 3).map(post => (
-          <article key={post._id} className="bg-white border border-slate-100 rounded-xl p-3">
-            <div className="text-xs text-primary-600 mb-1">{post.tag}</div>
-            <h3 className="font-semibold text-slate-800">{post.title}</h3>
-            <p className="text-xs text-slate-600 line-clamp-3 mt-1">{post.content}</p>
-          </article>
+          <Link
+            key={post._id}
+            to={`/community/${post._id}`}
+            aria-label={`Open post: ${post.title}`}
+            className="group"
+          >
+            <article className="bg-white border border-slate-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDCD2F]/60">
+              <div className="text-xs text-primary-600 mb-1">{post.tag}</div>
+              <h3 className="font-semibold text-slate-800">{post.title}</h3>
+              <p className="text-xs text-slate-600 line-clamp-3 mt-1">{post.content}</p>
+            </article>
+          </Link>
         ))}
       </div>
     )
+  }
+
+  const formatRelativeTime = (d) => {
+    try {
+      const now = Date.now()
+      const ts = new Date(d).getTime()
+      const diff = Math.max(0, Math.floor((now - ts) / 1000))
+      if (diff < 60) return 'just now'
+      if (diff < 3600) return `${Math.floor(diff / 60)} min ago`
+      if (diff < 86400) return `${Math.floor(diff / 3600)} h ago`
+      const days = Math.floor(diff / 86400)
+      if (days < 30) return `${days} day${days > 1 ? 's' : ''} ago`
+      const months = Math.floor(days / 30)
+      if (months < 12) return `${months} mo ago`
+      const years = Math.floor(months / 12)
+      return `${years} yr${years > 1 ? 's' : ''} ago`
+    } catch {
+      return ''
+    }
+  }
+
+  const getInitials = (text) => {
+    const base = String(text || 'Rations Community').trim()
+    const parts = base.split(/\s+/)
+    const a = (parts[0] || '').charAt(0)
+    const b = (parts[1] || '').charAt(0)
+    return (a + b).toUpperCase() || 'RC'
+  }
+
+  const youtubeIdFromUrl = (url) => {
+    try {
+      const u = new URL(String(url))
+      if (u.hostname.includes('youtu.be')) {
+        return u.pathname.replace('/', '') || null
+      }
+      if (u.hostname.includes('youtube.com')) {
+        return u.searchParams.get('v') || null
+      }
+      return null
+    } catch {
+      return null
+    }
   }
 
   return (
@@ -83,19 +132,125 @@ export default function Community({ embed = false }) {
       {loading && <p className="text-sm text-slate-500">Loading...</p>}
       {error && <p className="text-sm text-red-500">{error}</p>}
 
-      <div className="space-y-3">
-        {posts.map(post => (
-          <Link key={post._id} to={`/community/${post._id}`}>
-            <article className="bg-white border border-slate-100 rounded-xl p-4 text-sm hover:bg-slate-50">
-              <div className="flex justify-between items-center text-xs text-slate-500 mb-1">
-                <span className="uppercase tracking-wide text-slate-700">{post.tag}</span>
-                <span>{new Date(post.publishedAt || post.createdAt).toLocaleString()}</span>
-              </div>
-              <h3 className="font-semibold text-slate-800">{post.title}</h3>
-              <p className="text-xs text-slate-600 line-clamp-2 mt-1">{post.content}</p>
-            </article>
-          </Link>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {posts.map((post) => {
+          const mediaType = String(post.mediaType || '').toLowerCase()
+          const hasMedia = Boolean(post.mediaUrl)
+          const initials = getInitials(post.createdBy?.name || 'Rations Community')
+          const author = post.createdBy?.name || 'Rations Community'
+          const when = formatRelativeTime(post.publishedAt || post.createdAt)
+          const ytId = mediaType === 'youtube' ? youtubeIdFromUrl(post.mediaUrl) : null
+          return (
+            <Link
+              key={post._id}
+              to={`/community/${post._id}`}
+              aria-label={`Open post: ${post.title}`}
+              className="group"
+            >
+              <article className="bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FDCD2F]/60">
+                <div className="p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold text-[#0C1E22]">{author}</div>
+                      <div className="text-xs text-slate-500">{when}</div>
+                    </div>
+                    <div className="text-[10px] uppercase tracking-wide text-slate-500">{post.tag}</div>
+                  </div>
+
+                  <div className="text-sm text-slate-700 leading-relaxed max-w-[70ch]">
+                    <h3 className="text-base sm:text-lg font-bold text-[#0C1E22]">{post.title}</h3>
+                    <p className="mt-1 text-slate-600 line-clamp-3 break-words">{post.content || post.excerpt}</p>
+                  </div>
+                </div>
+
+                {(post.imageUrl && (!hasMedia || mediaType === 'link' || mediaType === 'audio' || mediaType === '')) && (
+                  <div className="relative overflow-hidden rounded-b-xl">
+                    <div className="w-full" style={{ paddingTop: '75%' }}>
+                      <img
+                        src={post.imageUrl}
+                        alt={post.mediaTitle || post.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {hasMedia && mediaType === 'image' && (
+                  <div className="relative overflow-hidden rounded-b-xl">
+                    <div className="w-full" style={{ paddingTop: '75%' }}>
+                      <img
+                        src={post.mediaUrl}
+                        alt={post.mediaTitle || post.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {hasMedia && (mediaType === 'youtube' || mediaType === 'video') && (
+                  <div className="relative rounded-b-xl overflow-hidden">
+                    {mediaType === 'youtube' && ytId ? (
+                      <div className="w-full" style={{ paddingTop: '56.25%' }}>
+                        <img
+                          src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`}
+                          alt={post.mediaTitle || post.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/30" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="h-12 w-12 rounded-full bg-white/90 text-[#0C1E22] flex items-center justify-center">▶</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-full bg-[#0C1E22]" style={{ paddingTop: '56.25%' }}>
+                        {post.imageUrl ? (
+                          <img
+                            src={post.imageUrl}
+                            alt={post.mediaTitle || post.title}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        ) : null}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="h-12 w-12 rounded-full bg-white/90 text-[#0C1E22] flex items-center justify-center">▶</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {hasMedia && mediaType === 'audio' && (
+                  <div className="px-4 pb-4">
+                    <audio controls className="w-full">
+                      <source src={post.mediaUrl} />
+                    </audio>
+                  </div>
+                )}
+
+                {hasMedia && mediaType === 'link' && (
+                  <div className="px-4 pb-4">
+                    <div className="p-3 border rounded-lg flex items-center justify-between">
+                      <div className="text-xs text-slate-700">Media link</div>
+                      <a
+                        href={post.mediaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1 rounded-full border text-xs"
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                      >
+                        Open media
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {hasMedia && post.mediaTitle && (
+                  <div className="px-4 py-2 text-xs text-slate-500">{post.mediaTitle}</div>
+                )}
+              </article>
+            </Link>
+          )
+        })}
       </div>
     </div>
   )

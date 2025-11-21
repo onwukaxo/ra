@@ -19,6 +19,7 @@ export default function AdminMenu() {
   const [filter, setFilter] = useState({ category: 'all', availability: 'all' })
   const [editingId, setEditingId] = useState(null)
   const [editForm, setEditForm] = useState({ name: '', price: '', category: '', imageUrl: '', description: '', isAvailable: true, popularity: 0 })
+  const [notice, setNotice] = useState('')
 
   const load = () => {
     setLoading(true)
@@ -55,12 +56,21 @@ export default function AdminMenu() {
 
   const toggleAvailability = async (item) => {
     await api.patch(`/admin/menu/${item._id}`, { isAvailable: !item.isAvailable })
+    setNotice('Availability updated')
     load()
   }
 
-  const removeItem = async (item) => {
-    if (!confirm(`Delete ${item.name}?`)) return
+  const archiveItem = async (item) => {
+    if (!confirm(`Remove ${item.name} from website?`)) return
     await api.delete(`/admin/menu/${item._id}`)
+    setNotice('Item removed from website (archived)')
+    load()
+  }
+
+  const deleteItemHard = async (item) => {
+    if (!confirm(`Delete ${item.name} permanently? This cannot be undone.`)) return
+    await api.delete(`/admin/menu/${item._id}/hard`)
+    setNotice('Item deleted permanently')
     load()
   }
 
@@ -73,6 +83,7 @@ export default function AdminMenu() {
   return (
     <AdminLayout>
       <h1 className="text-xl font-semibold">Manage menu</h1>
+      {notice && <p className="text-xs text-green-600 mt-1">{notice}</p>}
       <div className="mt-2 flex gap-2 text-xs">
         <select value={filter.category} onChange={(e)=>setFilter(f=>({...f, category: e.target.value}))} className="border rounded px-2 py-1">
           <option value="all">All categories</option>
@@ -189,10 +200,16 @@ export default function AdminMenu() {
                       {item.isAvailable ? 'Set unavailable' : 'Set available'}
                     </button>
                     <button
-                      onClick={() => removeItem(item)}
+                      onClick={() => archiveItem(item)}
                       className="text-xs px-3 py-1 rounded-full border border-slate-300"
                     >
-                      Delete
+                      Remove from Website
+                    </button>
+                    <button
+                      onClick={() => deleteItemHard(item)}
+                      className="text-xs px-3 py-1 rounded-full border border-slate-300 text-red-600"
+                    >
+                      Delete Permanently
                     </button>
                   </div>
                 </>

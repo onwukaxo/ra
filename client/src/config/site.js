@@ -23,6 +23,14 @@ export const SITE = {
     accountName: 'Rations Food Ltd',
     accountNumber: '1234567890',
   },
+  promoMessage: '',
+  promoStart: null,
+  promoEnd: null,
+  eventMessage: '',
+  eventDate: null,
+  eventStart: null,
+  eventEnd: null,
+  visitorAlertEnabled: false,
 }
 
 export const buildWhatsappOrderMessage = (items, totals, options = {}) => {

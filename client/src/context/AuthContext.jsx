@@ -69,7 +69,13 @@ export function AuthProvider({ children }) {
     applyAuthResponse(data)
   }
 
-  const value = { user, loading, login, register, logout, updateMe, sendOtp, verifyOtp, completeOtpVerification }
+  const changePassword = async ({ currentPassword, newPassword }) => {
+    const res = await api.put('/auth/change-password', { currentPassword, newPassword })
+    applyAuthResponse(res.data.data)
+    return true
+  }
+
+  const value = { user, loading, login, register, logout, updateMe, sendOtp, verifyOtp, completeOtpVerification, changePassword }
 
   return (
     <AuthContext.Provider value={value}>

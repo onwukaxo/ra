@@ -57,3 +57,12 @@ export async function deleteMenuItem(req, res) {
   await item.save()
   res.json({ success: true, message: 'Menu item archived' })
 }
+
+export async function hardDeleteMenuItem(req, res) {
+  const item = await MenuItem.findById(req.params.id)
+  if (!item) {
+    return res.status(404).json({ success: false, message: 'Menu item not found' })
+  }
+  await MenuItem.deleteOne({ _id: item._id })
+  res.json({ success: true, message: 'Menu item deleted permanently' })
+}

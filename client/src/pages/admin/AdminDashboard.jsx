@@ -32,7 +32,8 @@ export default function AdminDashboard() {
 
           <div className="mt-6">
             <h2 className="text-lg font-semibold mb-2">Recent orders</h2>
-            <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
+            {/* Desktop table */}
+            <div className="hidden md:block bg-white border border-slate-100 rounded-xl overflow-hidden">
               <table className="w-full text-xs">
                 <thead className="bg-slate-50">
                   <tr>
@@ -59,6 +60,33 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Mobile cards */}
+            <div className="md:hidden space-y-3">
+              {stats.latestOrders.map(o => (
+                <div key={o._id} className="bg-white border border-slate-100 rounded-xl p-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <div className="font-semibold">{o.user?.name || '—'}</div>
+                    <div
+                      className={`text-xs px-2 py-1 rounded-full border ${
+                        String(o.paymentStatus||'pending').toLowerCase()==='paid' ? 'bg-green-50 text-green-700 border-green-200' :
+                        String(o.paymentStatus||'pending').toLowerCase()==='failed' ? 'bg-red-50 text-red-700 border-red-200' :
+                        'bg-yellow-50 text-yellow-700 border-yellow-200'
+                      }`}
+                    >
+                      {(o.paymentStatus||'pending').toUpperCase()}
+                    </div>
+                  </div>
+                  <div className="mt-1 text-slate-700">
+                    <div>Type: {String(o.orderType||'').toUpperCase()}</div>
+                    <div>Total: ₦{Number(o.totalAmount||0).toLocaleString()}</div>
+                    <div className="text-slate-600">{new Date(o.createdAt).toLocaleString()}</div>
+                  </div>
+                  <div className="mt-2">
+                    <a href={`/admin/orders/${o._id}`} className="text-xs underline">View order</a>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </>
