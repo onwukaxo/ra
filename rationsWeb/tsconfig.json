@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "checkJs": false,
+    "types": ["vite/client", "node", "react"],
+    "baseUrl": ".",
+    "paths": {
+      "react": ["./node_modules/@types/react"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime"],
+      "@shared/ui/*": ["../../platform/shared/ui/*"],
+      "@shared/types": ["../../platform/shared/types/index.ts"],
+      "@shared/types/*": ["../../platform/shared/types/*"],
+      "@shared/hooks/*": ["../../platform/shared/hooks/*"]
+    }
+  },
+  "include": ["src"]
+}
