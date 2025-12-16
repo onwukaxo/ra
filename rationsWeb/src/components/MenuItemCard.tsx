@@ -48,7 +48,7 @@ export default function MenuItemCard({ item }: any) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+    <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col animate-fade-in">
       {item.imageUrl && (
         <img
           src={item.imageUrl}

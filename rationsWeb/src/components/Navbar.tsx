@@ -20,7 +20,8 @@ export default function Navbar() {
   const navigate = useNavigate()
   const [banner, setBanner] = useState(null)
 
-  const dashboardPath = !user ? '/dashboard' : (user.role === 'owner' || user.role === 'ADMIN' || user.role === 'SUPERADMIN') ? '/dashboard/admin' : user.role === 'manager' ? '/dashboard/manager' : user.role === 'cashier' ? '/dashboard/cashier' : user.role === 'kitchen' ? '/dashboard/kitchen' : '/dashboard'
+  // Admin dashboard removed from public site; user dashboard available
+  const dashboardPath = '/dashboard'
   const handleOpenCart = () => {
     setCartOpen(true)
     window.dispatchEvent(new CustomEvent('cart-opened'))
@@ -80,8 +81,8 @@ export default function Navbar() {
             )}
 
 
-            {user && (
-              <NavLink to={dashboardPath} className={navLinkClasses}>Dashboard</NavLink>
+            {user && user.role !== 'ADMIN' && user.role !== 'owner' && (
+              <NavLink to="/dashboard/profile" className={navLinkClasses}>My Account</NavLink>
             )}
             {user && user.role === 'ADMIN' && (
               <></>
@@ -111,7 +112,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-3">
               {user ? (
                 <>
-                  <Link to={dashboardPath} className="text-sm text-slate-700">Hi, {user.name}</Link>
+                  <Link to="/dashboard/profile" className="text-sm text-slate-700">Hi, {user.name}</Link>
                 </>
               ) : (
                 <>
@@ -178,8 +179,8 @@ export default function Navbar() {
               </>
             )}
             <NavLink to="/contact" onClick={() => setOpen(false)} className={navLinkClasses}>Contact</NavLink>
-                        {user && (
-              <NavLink to={dashboardPath} onClick={() => setOpen(false)} className={navLinkClasses}>Dashboard</NavLink>
+            {user && user.role !== 'ADMIN' && user.role !== 'owner' && (
+              <NavLink to="/dashboard/profile" onClick={() => setOpen(false)} className={navLinkClasses}>My Account</NavLink>
             )}
 
 

@@ -31,7 +31,7 @@ export default function Dashboard() {
     try {
       const [meRes, ordersRes] = await Promise.all([
         api.get('/auth/me'),
-        api.get('/orders/my')
+        api.get('/orders')
       ])
       setMe(meRes.data?.data || null)
       setOrders(Array.isArray(ordersRes.data?.data) ? ordersRes.data.data : [])

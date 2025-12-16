@@ -113,6 +113,7 @@ function App() {
               <Orders />
             </ProtectedRoute>
           } />
+          
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />

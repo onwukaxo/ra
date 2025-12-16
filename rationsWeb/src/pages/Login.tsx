@@ -25,15 +25,17 @@ export default function Login() {
     setError('')
     try {
       const u = await login(form.identifier, form.password)
+      const role = String(u?.role || '')
+      if (role === 'owner' || role === 'ADMIN' || role === 'SUPERADMIN') {
+        localStorage.removeItem('token')
+        setError('Admin and owner accounts must use the platform admin app.')
+        setLoading(false)
+        return
+      }
       if (from && from !== '/') {
         navigate(from, { replace: true })
       } else {
-        const role = String(u?.role || '')
-        if (role === 'owner' || role === 'ADMIN' || role === 'SUPERADMIN') navigate('/dashboard/admin', { replace: true })
-        else if (role === 'manager') navigate('/dashboard/manager', { replace: true })
-        else if (role === 'cashier') navigate('/dashboard/cashier', { replace: true })
-        else if (role === 'kitchen') navigate('/dashboard/kitchen', { replace: true })
-        else navigate('/', { replace: true })
+        navigate('/', { replace: true })
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed.')

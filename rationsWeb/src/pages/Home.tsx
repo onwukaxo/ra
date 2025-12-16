@@ -31,15 +31,15 @@ export default function Home() {
         />
         <div className="absolute inset-0 -z-10 bg-black/50" />
         <div className="relative mx-auto max-w-6xl px-6 py-28 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight animate-slide-up">
             Food, culture & community in every bite.
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg md:text-xl text-white/90 max-w-2xl mx-auto animate-slide-up animate-delay-1">
             Experience the best meals, made with love and fresh ingredients just for you.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
             <Link to="/menu" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto bg-ration-yellow text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-light transition duration-300">
+              <Button className="w-full sm:w-auto bg-ration-yellow text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-light transition duration-300 animate-slide-up animate-delay-2">
                 Order Now
               </Button>
             </Link>
